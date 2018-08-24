@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          charset="UTF-8"/>
+    <title>权限管理</title>
+    <script src="../../static/js/jquery/jquery-3.2.1.min.js"></script>
+    <script src="../../static/js/bootstrap/bootstrap.min.js"></script>
+    <script src="../../static/js/datatable/datatables.min.js"></script>
+    <script src="../../static/js/datatable/jquery.dataTables.min.js"></script>
+    <script src="../../static/js/core/business/menuBar.js"></script>
+    <script src="../../static/js/core/business/privilege.js"></script>
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../../static/css/hato.css" rel="stylesheet"/>
+
+    <style>
+
+        .well > .content {
+            border: 1px solid #ededed;
+            height: 370px;
+        }
+
+        .content > .content-left {
+            width: 150px;
+            height: 100%;
+            float: left;
+            border-right: 1px solid #ededed;
+            padding-top: 3px;
+            padding-left: 20px;
+        }
+
+        .content > .content-right {
+            width: calc(100% - 150px);
+            height: 100%;
+            float: right;
+        }
+
+        input[type="radio"] {
+            display: inline-block;
+        }
+
+        input[type=radio] {
+
+            height: 16px;
+            width: 16px;
+            margin-right: 10px;
+
+        }
+
+        input[type=checkbox] {
+            height: 16px;
+            width: 16px;
+            display: inline;
+            position: inherit;
+            margin-right: 10px;
+        }
+
+        .radio input[type=radio], .radio-inline input[type=radio] {
+            position: inherit;
+        }
+
+        .content-left > .radio {
+             margin-top: 0px;
+             margin-bottom: 25px;
+        }
+
+        .content-left > .radio label {
+            min-height: 16px;
+            font-size: 12px;
+            font-weight: 100;
+            color: #222222
+        }
+
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td,
+        .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+            padding-top: 8px;
+            padding-bottom: 9px;
+            height: 35px;
+        }
+
+        .content button {
+            width: 100px;
+            height: 30px;
+            float: right;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="left" style="width: 235px; height: 100%; float:left">
+</div>
+<div id="body" class="container" style="width: calc(100% - 235px); float:right">
+    <div class="well"
+         style="margin-top: 10px; padding-left: 30px; padding-right: 30px; min-height: 930px; min-width: 1088px">
+        <h5 class="h5-bold">权限管理</h5>
+        <br/>
+        <div class="table-title">
+            <h5 class="h5-gray-low" style="margin-left: 9px">用户</h5>
+            <h5 class="h5-bold">Admin</h5>
+            <h5 class="h5-gray-low">|</h5>
+            <h5 class="h5-gray-low">角色</h5>
+            <h5 class="h5-bold">超级管理员</h5>
+        </div>
+        <div class="content">
+            <div class="content-left">
+                <h5 style="margin-bottom: 22px">角色</h5>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios1"
+                               value="option1" checked> 超级管理员
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios2"
+                               value="option2" disabled>普通管理员
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios3"
+                               value="option2" disabled>运维人员
+                    </label>
+                </div>
+            </div>
+            <div class="content-right">
+                <table id="dt_privilege"
+                       class="table table-striped table-hover table-bordered" width="100%" style="border-width: 0px">
+                    <thead>
+                    <tr>
+                        <th style="border-left: 0px"><input type="checkbox" checked disabled/>功能模块</th>
+                        <th><input type="checkbox" checked disabled/>查询</th>
+                        <th><input type="checkbox" checked disabled/>新增</th>
+                        <th><input type="checkbox" checked disabled/>修改</th>
+                        <th style="border-right: 0px"><input type="checkbox" checked disabled/>删除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <button id="btn-submit" class="btn gray" type="button">保存设置</button>
+        </div>
+    </div>
+    <div id="footer" style="height: 30px; margin-left: 15px">
+        <h5 class="h5-gray-low">
+            &copy; 2018 HEZI版权所有
+        </h5>
+    </div>
+</div>
+<script language="JavaScript">
+    $(document).ready(function () {
+        var $left = $("#left");
+        $left.load("../fragment/menuBar.html #menuBar", function () {
+            $(".collapse").collapse();
+            menuBar().init('#authorityManagementMenu', null);
+        });
+        $left.height($("#body").height());
+        privilege.initPrivilege();
+    });
+</script>
+</body>
+</html>

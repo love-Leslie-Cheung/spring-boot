@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2018. For DMSoft Group.
+  ~  */
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          charset="UTF-8"/>
+    <title>首页</title>
+    <script src="../static/js/jquery/jquery-3.2.1.min.js"></script>
+    <script src="../static/js/bootstrap/bootstrap.min.js"></script>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <style type="text/css">
+        .page-header {
+            text-align: center;
+            margin: 10%;
+        }
+
+        .nav-pills li a {
+            background-color: transparent;
+        }
+
+        .nav-pills li a:active {
+            background-color: #dcdcdc;
+        }
+
+        .table-title {
+            border: 1px solid #ededed;
+            border-bottom: 0px;
+        }
+
+        input[type=file] {
+            display: inline-block;
+        }
+
+        .product-well {
+            width: 100%;
+            height: 400px;
+            padding-bottom: 30px;
+            border: 1px solid #ededed;
+            overflow-y: scroll;
+        }
+
+        .product-well .thumbnail {
+            width: 150px;
+            height: 120px;
+            margin-bottom: 0px;
+            border: 1px solid #ededed;
+            position: relative;
+        }
+
+        .product-well > .thumbnail > .mask-block {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .product-well > .thumbnail > .mask-block-show {
+            opacity: 0.6;
+            background: #000;
+            border: 2px solid #22ac38;
+        }
+
+        .product-well > .thumbnail > .mask-img {
+            width: 20px;
+            height: 20px;
+            margin: 35% 40%;
+            position: absolute;
+            background-color: white;
+            border: 0px;
+            border-radius: 10px;
+            opacity: 0;
+        }
+
+        .product-well > .thumbnail > .show-img {
+            width: 100%;
+            height: 100%;
+            border: 0px;
+            position: absolute;
+        }
+
+        .well > button {
+            width: 100px;
+            margin-top: 40px;
+            float: right;
+        }
+
+    </style>
+</head>
+<body>
+<div id="divMenuBar"></div>
+
+<div class="container well">
+    <h1 th:text="${message }" style="text-align: center;"></h1>
+    <div class="page-header">
+        <form id="staffForm">
+            <div class="form-group">
+                <label for="fileChoose">请选择员工信息文件：</label>
+                <input type="file" id="fileChoose" name="filename"/>
+                <input type="button" onclick="uploadStaff()" value="Submit" class="btn btn-primary"/>
+            </div>
+        </form>
+        <form id="SalaryForm">
+            <div class="form-group">
+                <label for="fileChoose2">请选择员工薪资文件：</label>
+                <input type="file" id="fileChoose2" name="filename2"/>
+                <input type="button" onclick="uploadSalary()" value="Submit" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:inline="javascript">
+    $("#divMenuBar").load("/fragment/menuBar.html #" + [[${role}]] + "MenuBar");
+
+    function uploadStaff() {
+        if ($("#fileChoose")[0].value.trim() == "") {
+            alert("请选择文件！");
+            return;
+        }
+        $.ajax({
+            url: "/import/Staff",
+            type: "POST",
+            data: new FormData($("#staffForm")[0]),
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                alert(result);
+            },
+            error: function (result) {
+                alert(result);
+            }
+        })
+    }
+
+    function uploadSalary() {
+        if ($("#fileChoose2")[0].value.trim() == "") {
+            alert("请选择文件！");
+            return;
+        }
+        $.ajax({
+            url: "/import/Salary",
+            type: "POST",
+            data: new FormData($("#SalaryForm")[0]),
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                alert(result);
+            },
+            error: function (result) {
+                alert(result);
+            }
+        })
+    }
+</script>
+<script src="/static/js/core/business/activeMenu.js"></script>
+</body>
+</html>

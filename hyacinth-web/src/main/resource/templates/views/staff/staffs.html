@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2018. For DMSoft Group.
+  ~  */
+  -->
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          charset="UTF-8"/>
+    <title>员工信息表</title>
+    <link href="../../../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/static/css/datatable/jquery.dataTables.min.css"/>
+    <style type="text/css">
+        th, td, h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="divMenuBar">
+</div>
+<div class="container well">
+    <h1>员工信息表</h1>
+    <table class="table" id="staffTable" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>ID Card</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Position</th>
+            <th>Hire Date</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <th>#</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>ID Card</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Position</th>
+            <th>Hire Date</th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script src="../../../static/js/jquery/jquery-3.2.1.min.js"></script>
+<script src="../../../static/js/bootstrap/bootstrap.min.js"></script>
+<script src="../../../static/js/datatable/jquery.dataTables.min.js"></script>
+<script th:inline="javascript">
+    $("#divMenuBar").load("/fragment/menuBar.html #" + [[${role}]] + "MenuBar");
+
+    $("#staffTable").DataTable({
+        "bFilter": false,
+        "paging": true,
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": '/getStaffs',
+            "type": "get",
+            "dataSrc": function (data) {
+                return data;
+            },
+            "error": function (e) {
+                console.log(e.status + "  :status");
+                if (e.status == 401 || e.status == 500 || e.status == 404) {
+                    //TODO
+                }
+            }
+        },
+        "columns": [
+            {"data": "id"},
+            {"data": "code"},
+            {"data": "name"},
+            {"data": "idCard"},
+            {"data": "phone"},
+            {"data": "email"},
+            {"data": "department"},
+            {"data": "position"},
+            {"data": "hiredate"}
+        ]
+    });
+</script>
+<script src="/static/js/core/business/activeMenu.js"></script>
+</body>
+</html>

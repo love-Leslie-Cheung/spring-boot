@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2018. For DMSoft Group.
+  ~  */
+  -->
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          charset="UTF-8"/>
+    <title>员工信息表</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/static/css/datatable/jquery.dataTables.min.css"/>
+    <style type="text/css">
+        th, td, h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="divMenuBar">
+</div>
+<div class="container well">
+    <h1>员工信息表
+        <small th:inline="text">(共[[${staffs.size()}]]名)</small>
+    </h1>
+    <table id="staffsTable" class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>ID Card</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Position</th>
+            <th>Hire Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="staff : ${staffs}" style="cursor: pointer;">
+            <td th:text="${{staff.id}}"></td>
+            <td th:text="${{staff.code}}"></td>
+            <td th:text="${{staff.name}}"></td>
+            <td th:text="${{staff.idCard}}"></td>
+            <td th:text="${{staff.phone}}"></td>
+            <td th:text="${{staff.email}}"></td>
+            <td th:text="${{staff.department}}"></td>
+            <td th:text="${{staff.position}}"></td>
+            <td th:text="${{staff.hiredate.toString()}}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <p style="margin-top: 20px;">
+        <button id="download_btn" onclick="download()" type="button" class="btn btn-primary"
+                style="float: right;">下载本页所选
+        </button>
+        <button id="sendEmail" type="button" class="btn btn-primary"
+                style="float: right; margin: 0 20px;" onclick="sendEmail()">
+            发送工资单到所选员工
+        </button>
+        <button id="inverse" type="button" class="btn btn-primary" style="float: right;">反选本页</button>
+    </p>
+</div>
+
+<script src="../static/js/jquery/jquery-3.2.1.min.js"></script>
+<script src="../static/js/bootstrap/bootstrap.min.js"></script>
+<script src="/static/js/datatable/jquery.dataTables.min.js"></script>
+<script th:inline="javascript">
+    $("#divMenuBar").load("/fragment/menuBar.html #" + [[${role}]] + "MenuBar");
+
+    function download() {
+        var selectes = $(".selected").toArray();
+        if (selectes.length == 0) {
+            alert("请至少选择一个！");
+            return false;
+        } else {
+            var codes = [];
+            while (selectes.length != 0) {
+                codes.push(selectes.pop().children[1].innerHTML)
+            }
+            $.ajax({
+                type: "POST",
+                url: "/export",
+                data: {
+                    "codes": codes.join(":")
+                },
+                success: function (result) {
+                    if (result) {
+                        alert("下载成功！文件已保存在您的\"下载\"文件夹，文件名为\"工号-姓名.zip\"");
+                    } else {
+                        alert("下载失败！薪资信息为空");
+                    }
+                }
+            })
+        }
+    }
+
+    $("#inverse").click(function () {
+        $("tbody>tr").toggleClass("selected");
+    });
+
+    function sendEmail() {
+        var selectes = $(".selected").toArray();
+        if (selectes.length == 0) {
+            alert("请至少选择一个！");
+            return false;
+        } else {
+            var codes = [];
+            while (selectes.length != 0) {
+                codes.push(selectes.pop().children[1].innerHTML)
+            }
+            $.ajax({
+                type: "POST",
+                url: "/sendEmail",
+                data: {
+                    "codes": codes.join(":")
+                },
+                success: function (result) {
+                    if (result == "success") {
+                        alert("发送成功！");
+                    } else {
+                        alert("发送失败！");
+                    }
+                }
+            })
+        }
+    }
+
+    window.onload = function () {
+        $("#staffsTable").DataTable({
+            "searching": true,
+            "language": {
+                "lengthMenu": "每页 _MENU_ 条记录",
+                "zeroRecords": "没有找到记录",
+                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                "infoEmpty": "无记录",
+                "infoFiltered": "(从 _MAX_ 条记录过滤)"
+            }
+        });
+        $('#staffsTable tbody').on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
+    }
+</script>
+<script src="/static/js/core/business/activeMenu.js"></script>
+</body>
+</html>

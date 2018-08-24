@@ -1,0 +1,33 @@
+/*.table-row-cell:selected, .tree-table-row-cell:selected {*/
+    /*-fx-background-color: #fcf16e;*/
+/*}*/
+
+/*.mainTitle {*/
+    /*-fx-border-color: #eee;*/
+    /*-fx-border-width: 0 0 1 0;*/
+/*}*/
+
+/*.titleButton {*/
+    /*-fx-min-height: 30px;*/
+    /*-fx-background-color: none;*/
+    /*-fx-font-weight: bold;*/
+/*}*/
+
+/*.calendarView {*/
+    /*-fx-background-color: #f5f5f5;*/
+/*}*/
+
+/*.root {*/
+    /*-fx-font-size: 11px;*/
+    /*-fx-font-family: "微软雅黑";*/
+    /*-fx-base: #efefef;*/
+/*}*/
+
+/*.menu-item {*/
+    /*-fx-min-width: 150px;*/
+    /*-fx-pref-width: 150px;*/
+/*}*/
+
+.button-primary {
+    -fx-base: #ea2028;
+}

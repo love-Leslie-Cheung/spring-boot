@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2018. For DMSoft Group.
+  ~  */
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          charset="UTF-8"/>
+    <title>首页</title>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/static/css/datatable/jquery.dataTables.min.css"/>
+
+    <style type="text/css">
+        th, td, h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="divMenuBar"></div>
+
+<div class="container well">
+    <h1>操作历史记录
+        <small th:inline="text">(共[[${histories.size()}]]条)</small>
+    </h1>
+    <table id="historyTable" class="table table-hover table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>operator_code</th>
+            <th>operation_target</th>
+            <th>operation type</th>
+            <th>operation result</th>
+            <th>operating time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="history : ${histories}">
+            <td th:text="${{history.id}}"></td>
+            <td th:text="${{history.operator_code}}"></td>
+            <td th:text="${{history.operation_target}}"></td>
+            <td th:text="${{history.operation_type}}"></td>
+            <td th:text="${{history.operate_result}}"></td>
+            <td th:text="${{history.operating_time.toString()}}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="../static/js/jquery/jquery-3.2.1.min.js"></script>
+<script src="../static/js/bootstrap/bootstrap.min.js"></script>
+<script src="/static/js/datatable/jquery.dataTables.min.js"></script>
+<script th:inline="javascript">
+    $("#divMenuBar").load("/fragment/menuBar.html #" + [[${role}]] + "MenuBar");
+
+    window.onload = function () {
+        $("#historyTable").DataTable({
+            "searching": true,
+            "language": {
+                "lengthMenu": "每页 _MENU_ 条记录",
+                "zeroRecords": "没有找到记录",
+                "info": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+                "infoEmpty": "无记录",
+                "infoFiltered": "(从 _MAX_ 条记录过滤)"
+            }
+        });
+    }
+</script>
+<script src="/static/js/core/business/activeMenu.js"></script>
+</body>
+</html>

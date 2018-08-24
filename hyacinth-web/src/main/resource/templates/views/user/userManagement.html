@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2018. For DMSoft Group.
+  ~  */
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          charset="UTF-8"/>
+    <title>首页</title>
+    <link href="../../../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <style type="text/css">
+        th, td, h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="divMenuBar"></div>
+
+<div class="container well">
+    <h1>User Management</h1>
+    <h4 style="text-align: center; color: red;" th:text="${{msg}}"></h4>
+    <table class="table table-hover table-striped">
+        <tr>
+            <th>#</th>
+            <th>Login Name</th>
+            <th>Password</th>
+            <th>Change Role</th>
+            <!--<th>Available</th>-->
+            <th>Add Time</th>
+            <th>Delete User</th>
+            <th>State</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${{user.id}}" style="padding-top: 15px;"></td>
+            <td><input type="text" th:value="${{user.login_name}}" class="form-control" readonly="readonly"/></td>
+            <td><input class="form-control" type="password" th:value="${{user.password}}"/></td>
+            <td>
+                <select class="form-control" th:value="${{user.role_id}}">
+                    <option value="1">admin</option>
+                    <option value="2">user</option>
+                </select>
+            </td>
+            <!--<td>-->
+            <!--<select disabled="disabled" class="form-control">-->
+            <!--<option value="true">True</option>-->
+            <!--<option value="false">False</option>-->
+            <!--</select>-->
+            <!--</td>-->
+            <td th:text="${{user.add_time}}" style="padding-top: 15px;"></td>
+            <td>
+                <button class="btn btn-danger deleteBtn">Delete User</button>
+            </td>
+            <td>
+                <button class="btn btn-danger savaBtn">Save Changes</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<script src="../../../static/js/jquery/jquery-3.2.1.min.js"></script>
+<script src="../../../static/js/bootstrap/bootstrap.min.js"></script>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        $("#divMenuBar").load("/fragment/menuBar.html #adminMenuBar");
+
+        $(".deleteBtn").click(function (e) {
+            e.stopPropagation();
+            $.ajax({
+                type: "POST",
+                url: "/views/user/delete",
+                data: {
+                    "login_name": $(this).parents("tr").find("input")[0].value
+                },
+                success: function (result) {
+                    location.reload(true);
+                    alert(result);
+                }
+            })
+        });
+
+        $(".savaBtn").click(function (e) {
+            e.stopPropagation();
+            $.ajax({
+                type: "POST",
+                url: "/views/user/update",
+                data: {
+                    "login_name": $(this).parents("tr").find("input")[0].value,
+                    "newPassword": $(this).parents("tr").find("input")[1].value,
+                    "roleId": $(this).parents("tr").find("select")[0].value,
+                },
+                success: function (result) {
+                    location.reload(true);
+                    alert(result);
+                }
+            })
+        });
+
+        var selects = document.getElementsByTagName("select");
+        for (var i = 0; selects.length - i != 0; i++) {
+            if (selects[i].children[0].value == selects[i].getAttribute("value")) {
+                selects[i].children[0].setAttribute("selected", true);
+            } else {
+                selects[i].children[1].setAttribute("selected", true);
+            }
+        }
+    });
+</script>
+<script src="/static/js/core/business/activeMenu.js"></script>
+</body>
+</html>
